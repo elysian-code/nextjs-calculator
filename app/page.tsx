@@ -29,7 +29,6 @@ export interface ICalc {
   }[];
 }
 
-
 export default function Calculator() {
   // let value = 0;
   const [calc, setCalc] = useState<ICalc>({
@@ -44,25 +43,30 @@ export default function Calculator() {
     history: [],
   });
 
-  const handleButtonClick = (value:string) => {
-
-    if ((calc.operator == "" && (calc.value == "0" ||calc.lastSign=="=")) && value != ".") {
-      
-      setCalc((prevCalc: ICalc) =>({
-            ...prevCalc,
-            operand: "",
-            operator: "",
-            lastValue: "",
-            expression: "",
-            value: value,
-            chOp: false,
-            lastSign: "",
-          
-          }))
-          return
-    }if (calc.operator == "" && (calc.value == "0" ||calc.lastSign=="=") && value == ".") {
-      
-      setCalc((prevCalc: ICalc) =>({
+  const handleButtonClick = (value: string) => {
+    if (
+      calc.operator == "" &&
+      (calc.value == "0" || calc.lastSign == "=") &&
+      value != "."
+    ) {
+      setCalc((prevCalc: ICalc) => ({
+        ...prevCalc,
+        operand: "",
+        operator: "",
+        lastValue: "",
+        expression: "",
+        value: value,
+        chOp: false,
+        lastSign: "",
+      }));
+      return;
+    }
+    if (
+      calc.operator == "" &&
+      (calc.value == "0" || calc.lastSign == "=") &&
+      value == "."
+    ) {
+      setCalc((prevCalc: ICalc) => ({
         ...prevCalc,
         operand: "",
         operator: "",
@@ -71,47 +75,42 @@ export default function Calculator() {
         value: "0" + value,
         chOp: false,
         lastSign: "",
-        
-       
-      }))
-    } else if (calc.operator != "" && (calc.value == "0" || calc.change) && value != ".") {
-      
+      }));
+    } else if (
+      calc.operator != "" &&
+      (calc.value == "0" || calc.change) &&
+      value != "."
+    ) {
       setCalc((prevCalc: ICalc) => ({
-        ...prevCalc, 
+        ...prevCalc,
         value: value,
         chOp: false,
         change: false,
-        
-
-      }))
-    } else if (calc.operator != "" && (calc.value == "0" || calc.change) && value == ".") {
-      
+      }));
+    } else if (
+      calc.operator != "" &&
+      (calc.value == "0" || calc.change) &&
+      value == "."
+    ) {
       setCalc((prevCalc: ICalc) => ({
-        ...prevCalc, 
+        ...prevCalc,
         value: "0" + value,
         chOp: false,
         change: false,
-        expression: prevCalc.operand + " "+ prevCalc.operator
-
-      }))
-      
+        expression: prevCalc.operand + " " + prevCalc.operator,
+      }));
     } else {
-      
       setCalc((prevCalc: ICalc) => ({
-        ...prevCalc, 
+        ...prevCalc,
         value: prevCalc.value + value,
-        chOp: false
-
-      }))
+        chOp: false,
+      }));
     }
-    
-  }
+  };
 
-  const handleOperator = (sign:string) => {
+  const handleOperator = (sign: string) => {
     if (calc.operator == "" && calc.lastValue == "") {
-      
       setCalc((prevCalc: ICalc) => ({
-        
         ...prevCalc,
         operand: prevCalc.value,
         operator: sign,
@@ -119,28 +118,46 @@ export default function Calculator() {
         lastSign: "",
         chOp: true,
         change: true,
-        
-       
-      }))
-    } else if (calc.operator != "" && (calc.lastValue == "" && !calc.chOp)) {
-      
+      }));
+    } else if (calc.operator != "" && calc.lastValue == "" && !calc.chOp) {
       setCalc((prevCalc) => ({
         ...prevCalc,
-        
-        value: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.value).toString()),
-        operand: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.value).toString()),
+
+        value: String(
+          eval(prevCalc.operand + prevCalc.operator + prevCalc.value).toString()
+        ),
+        operand: String(
+          eval(prevCalc.operand + prevCalc.operator + prevCalc.value).toString()
+        ),
         operator: sign,
-        expression: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.value).toString()) + " " + sign,
+        expression:
+          String(
+            eval(
+              prevCalc.operand + prevCalc.operator + prevCalc.value
+            ).toString()
+          ) +
+          " " +
+          sign,
         change: true,
         chOp: true,
-        history: [...prevCalc.history,{expression: prevCalc.operand + "  " +
-         prevCalc.operator + "  " + prevCalc.value + " " + "=",
-         value: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.value))}]
-        
-        
-      }))
-    } else if (calc.operator != "" && (calc.lastSign=="=" || calc.chOp)){
-      
+        history: [
+          ...prevCalc.history,
+          {
+            expression:
+              prevCalc.operand +
+              "  " +
+              prevCalc.operator +
+              "  " +
+              prevCalc.value +
+              " " +
+              "=",
+            value: String(
+              eval(prevCalc.operand + prevCalc.operator + prevCalc.value)
+            ),
+          },
+        ],
+      }));
+    } else if (calc.operator != "" && (calc.lastSign == "=" || calc.chOp)) {
       setCalc((prevCalc) => ({
         ...prevCalc,
 
@@ -150,57 +167,111 @@ export default function Calculator() {
         lastSign: "",
         change: true,
         lastValue: "",
-        
-      }))
+      }));
     }
-  }
+  };
 
   const handleEqualTo = (sign: string) => {
     if (calc.operator != "" && calc.lastValue != "") {
       setCalc((prevCalc) => ({
         ...prevCalc,
-        value: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.lastValue)),
-        operand: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.lastValue)),
-        expression: prevCalc.operand + " " + prevCalc.operator + " " + prevCalc.lastValue + " " + "=",
+        value: String(
+          eval(prevCalc.operand + prevCalc.operator + prevCalc.lastValue)
+        ),
+        operand: String(
+          eval(prevCalc.operand + prevCalc.operator + prevCalc.lastValue)
+        ),
+        expression:
+          prevCalc.operand +
+          " " +
+          prevCalc.operator +
+          " " +
+          prevCalc.lastValue +
+          " " +
+          "=",
         lastSign: sign,
-        history: [...prevCalc.history,{expression: prevCalc.operand + "  " +
-         prevCalc.operator + "  " + prevCalc.lastValue + " " + "=",
-         value: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.lastValue))}]
-      }))
-    } else if (calc.operator !== "" && calc.lastValue== "") {
-      setCalc((prevCalc) =>({
+        history: [
+          ...prevCalc.history,
+          {
+            expression:
+              prevCalc.operand +
+              "  " +
+              prevCalc.operator +
+              "  " +
+              prevCalc.lastValue +
+              " " +
+              "=",
+            value: String(
+              eval(prevCalc.operand + prevCalc.operator + prevCalc.lastValue)
+            ),
+          },
+        ],
+      }));
+    } else if (calc.operator !== "" && calc.lastValue == "") {
+      setCalc((prevCalc) => ({
         ...prevCalc,
-        value: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.value)),
-        operand: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.value)),
-        expression: prevCalc.operand + " " + prevCalc.operator + " " + prevCalc.value + " " + "=",
+        value: String(
+          eval(prevCalc.operand + prevCalc.operator + prevCalc.value)
+        ),
+        operand: String(
+          eval(prevCalc.operand + prevCalc.operator + prevCalc.value)
+        ),
+        expression:
+          prevCalc.operand +
+          " " +
+          prevCalc.operator +
+          " " +
+          prevCalc.value +
+          " " +
+          "=",
         lastValue: prevCalc.value,
         lastSign: sign,
         change: true,
-        history: [...prevCalc.history,{expression: prevCalc.operand + "  " +
-         prevCalc.operator + "  " + prevCalc.value + " " + "=",
-         value: String(eval(prevCalc.operand + prevCalc.operator + prevCalc.value))}]
-      }))
+        history: [
+          ...prevCalc.history,
+          {
+            expression:
+              prevCalc.operand +
+              "  " +
+              prevCalc.operator +
+              "  " +
+              prevCalc.value +
+              " " +
+              "=",
+            value: String(
+              eval(prevCalc.operand + prevCalc.operator + prevCalc.value)
+            ),
+          },
+        ],
+      }));
     }
-  }
+  };
 
   const backspace = () => {
-    setCalc(prevCalc => ({
+    setCalc((prevCalc) => ({
       ...prevCalc,
-      value: prevCalc.value.slice(0, -1)
-    }))
-  }
+      value: prevCalc.value.slice(0, -1),
+    }));
+  };
 
   const pCent = () => {
-    setCalc(prevCalc => ({
+    setCalc((prevCalc) => ({
       ...prevCalc,
-      value: String(eval((prevCalc.value || "0") + "/" + "100" + "*" + (prevCalc.operand || "0"))),
-      change: true
-    }))
-  }
+      value: String(
+        eval(
+          (prevCalc.value || "0") +
+            "/" +
+            "100" +
+            "*" +
+            (prevCalc.operand || "0")
+        )
+      ),
+      change: true,
+    }));
+  };
 
   const clear = () => {
-    
-    setCalc((prevCalc: ICalc) =>({
+    setCalc((prevCalc: ICalc) => ({
       ...prevCalc,
       operand: "",
       operator: "",
@@ -209,75 +280,72 @@ export default function Calculator() {
       value: "0",
       chOp: false,
       lastSign: "",
-
-    }))
-  }
+    }));
+  };
 
   const sqrt = () => {
-    setCalc(prevCalc => ({
+    setCalc((prevCalc) => ({
       ...prevCalc,
-      value: String(Math.sqrt(prevCalc.value))
-    }))
-  }
+      value: String(Math.sqrt(prevCalc.value)),
+    }));
+  };
 
   const CE = () => {
-    setCalc(prevCalc => ({
+    setCalc((prevCalc) => ({
       ...prevCalc,
-      value: "0"
-    }))
-  }
+      value: "0",
+    }));
+  };
 
   const div = () => {
-    setCalc(prevCalc => ({
+    setCalc((prevCalc) => ({
       ...prevCalc,
-      value: String(eval('1'+'/'+prevCalc.value))
-    }))
-  }
+      value: String(eval("1" + "/" + prevCalc.value)),
+    }));
+  };
 
-  const SQ = ()=> {
-    setCalc(prevCalc => ({
+  const SQ = () => {
+    setCalc((prevCalc) => ({
       ...prevCalc,
-      value: String(Number(prevCalc.value)**2)
-    }))
-  }
+      value: String(Number(prevCalc.value) ** 2),
+    }));
+  };
 
   const minP = () => {
-    setCalc(prevCalc => ({
+    setCalc((prevCalc) => ({
       ...prevCalc,
-    value: prevCalc.value * -1
-    }))
-  }
+      value: prevCalc.value * -1,
+    }));
+  };
 
-  const op2 = (sign:string) => {
-    switch(sign){
+  const op2 = (sign: string) => {
+    switch (sign) {
       case "BS":
         backspace();
-        break
+        break;
       case "%":
-        pCent()
-        break
+        pCent();
+        break;
       case "C":
-        clear()
-        break
+        clear();
+        break;
       case "CE":
-        CE()
-        break
+        CE();
+        break;
       case "1/x":
-        div()
-        break
+        div();
+        break;
       case "sqr":
-        sqrt()
-        break
+        sqrt();
+        break;
       case "SQ":
-        SQ()
-        break
+        SQ();
+        break;
       case "-/+":
-        minP()
-        break
-
+        minP();
+        break;
     }
-  }
-
+  };
 
   return (
     <div className="grid grid-cols-12 flex-1">
@@ -285,11 +353,15 @@ export default function Calculator() {
         <SubHeader />
         <DisplayPanel calc={calc} />
         <OptionPanel />
-        <CellsPanel handleButtonClick={handleButtonClick}
-         handleOperator={handleOperator} handleEqualTo={handleEqualTo} op2={op2} />
+        <CellsPanel
+          handleButtonClick={handleButtonClick}
+          handleOperator={handleOperator}
+          handleEqualTo={handleEqualTo}
+          op2={op2}
+        />
       </div>
       <div className="col-span-3">
-        <History calc={calc}/>
+        <History calc={calc} />
       </div>
     </div>
   );
