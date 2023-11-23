@@ -122,7 +122,6 @@ export default function Calculator() {
     } else if (calc.operator != "" && calc.lastValue == "" && !calc.chOp) {
       setCalc((prevCalc) => ({
         ...prevCalc,
-
         value: String(
           eval(prevCalc.operand + prevCalc.operator + prevCalc.value).toString()
         ),
